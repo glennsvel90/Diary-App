@@ -21,6 +21,8 @@ python diary.py
 
 ## Command Line Terminal Preview
 
+![alt text](https://github.com/glennsvel90/Diary-App/blob/master/diarypreview.PNG "Diary Preview")
+
 
 
 
