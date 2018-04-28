@@ -12,37 +12,27 @@ db = SqliteDatabase('diary.db')
 
 
 class Entry(Model):
-    #the reason we use a textfield for the bottom instead
-    #of a varchar field is that we don't need a max length if
-    #we use a textfield. Varchar input requires a max length arguement restriction
-    #But textfield don't need the max length restriction
-    content = TextField()
-    #for datetime.datetime.now, when "default=" is present, you don't
-    #need the "datetime.datetime.now()" with the parentheses
-    #after the "now". Without parentheses with the defaut condition
-    #makes the timestamp occur corresponding the time when the entry is made in the diary;
-    #there is no timestamp for the time what ever
-    #the time was when when running the script
-    timestamp = DateTimeField(default=datetime.datetime.now)
+    """ This is the entry for a diary record """
 
+    content = TextField() # use this field since no max length is needed
+    timestamp = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
         database = db
 
-#have a function that initalizes everything for us
+# have a function that initalizes everything for us
 def initialize():
     """create the database and the table if they don't exist"""
+    
     db.connect()
     #the "create_table" function has an underscore always
     db.create_tables([Entry], safe=True)
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
-#you want a menu that runs, but you don't want it to
-#run all the time. So you want to put it into a function
-#for better organization
+    
 def menu_loop():
-    """show the menu"""
+    """ show the menu """
 
     choice = None
 
@@ -58,6 +48,7 @@ def menu_loop():
             menu[choice]()
 def add_entry():
     """Add an entry"""
+    
     print("Enter your entry. Press ctrl+d when finished.")
     data = sys.stdin.read().strip()
 
@@ -68,6 +59,7 @@ def add_entry():
 
 def view_entries(search_query=None):
     """View previous entries"""
+    
     entries = Entry.select().order_by(Entry.timestamp.desc())
     if search_query:
         entries = entries.where(Entry.content.contains(search_query))
@@ -92,10 +84,12 @@ def view_entries(search_query=None):
 
 def search_entries():
     """search entries for a phrase/word"""
+    
     view_entries(input('Search query: '))
 
 def delete_entry(entry):
     """Delete an entry"""
+    
     if input('Are you sure? [y/N] ').lower().strip() == 'y':
         entry.delete_instance()
         print('Deleted Successfully!')
